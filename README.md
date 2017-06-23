@@ -1,4 +1,4 @@
-# itamae lamp centos6
+# itamae web centos7
 
 create web environment by itamae
 
