@@ -32,6 +32,13 @@ when 6
   end
 end
 
+# ミドルウェア設定
+package "wget"
+package "glibc-common"
+execute "yum -y update glibc-common" do
+  user "root"
+end
+
 # firewalld停止、無効化
 service "firewalld" do
 	action [:stop, :disable]

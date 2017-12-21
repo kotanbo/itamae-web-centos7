@@ -59,16 +59,14 @@ file "/etc/httpd/conf.d/phpMyAdmin.conf" do
   not_if "grep 'Require ip 192.168.' /etc/httpd/conf.d/phpMyAdmin.conf"
   only_if "test -f /etc/httpd/conf.d/phpMyAdmin.conf"
 end
-file "/etc/httpd/conf.d/phpMyAdmin.conf" do
-  user "root"
-  action :edit
-  block do |content|
-    content.gsub!("Allow from ::1", "Allow from ::1\n     Allow from 192.168.")
-  end
-  not_if "grep 'Allow from 192.168.' /etc/httpd/conf.d/phpMyAdmin.conf"
-  only_if "test -f /etc/httpd/conf.d/phpMyAdmin.conf"
-end
 
+execute "/ect/phpMyAdmin permission temporary change" do
+  user "root"
+  command <<-EOS
+    chmod 777 /etc/phpMyAdmin
+    chmod 777 /etc/phpMyAdmin/config.inc.php
+  EOS
+end
 file "/etc/phpMyAdmin/config.inc.php" do
   user "root"
   action :edit
@@ -77,6 +75,13 @@ file "/etc/phpMyAdmin/config.inc.php" do
   end
   not_if "grep 'LoginCookieValidity' /etc/phpMyAdmin/config.inc.php"
   only_if "test -f /etc/phpMyAdmin/config.inc.php"
+end
+execute "/ect/phpMyAdmin permission undo" do
+  user "root"
+  command <<-EOS
+    chmod 750 /etc/phpMyAdmin
+    chmod 640 /etc/phpMyAdmin/config.inc.php
+  EOS
 end
 
 execute "Composer install" do
