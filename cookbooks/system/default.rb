@@ -35,7 +35,7 @@ end
 # ミドルウェア設定
 package "wget"
 package "glibc-common"
-execute "yum -y update glibc-common" do
+execute "yum -y update glibc-common" do # for locale error
   user "root"
 end
 
