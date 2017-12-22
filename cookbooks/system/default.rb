@@ -39,6 +39,16 @@ execute "yum -y update glibc-common" do # for locale error
   user "root"
 end
 
+# SELinux停止
+file "/etc/selinux/config" do
+  action :edit
+  user "root"
+  block do |content|
+    content.gsub!("enforcing", "disabled")
+  end
+  only_if "test -f /etc/selinux/config"
+end
+
 # firewalld停止、無効化
 service "firewalld" do
 	action [:stop, :disable]
