@@ -44,7 +44,7 @@ file "/etc/selinux/config" do
   action :edit
   user "root"
   block do |content|
-    content.gsub!("enforcing", "disabled")
+    content.gsub!("SELINUX=enforcing", "SELINUX=disabled")
   end
   only_if "test -f /etc/selinux/config"
 end
